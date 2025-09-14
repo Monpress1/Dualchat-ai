@@ -1,0 +1,16 @@
+{
+  "name": "gemini-websocket-chat",
+  "version": "1.0.0",
+  "description": "A simple chat app with WebSockets and Gemini API.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "node-fetch": "^3.3.2",
+    "ws": "^8.18.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
