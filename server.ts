@@ -111,7 +111,9 @@ const HTML = `<!DOCTYPE html>
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data.sender === 'user') {
-        addMessage(data.message, 'user', data.name);
+        if (data.name !== userName) {
+          addMessage(data.message, 'user', data.name);
+        }
       } else if (data.sender === 'bot') {
         addMessage(data.message, 'bot', 'Gemini');
       } else if (data.sender === 'error') {
@@ -124,6 +126,7 @@ const HTML = `<!DOCTYPE html>
       const userMsg = messageInput.value.trim();
       if (userMsg) {
         ws.send(JSON.stringify({ name: userName, userMsg }));
+        addMessage(userMsg, 'user', userName);
         messageInput.value = '';
       }
     });
@@ -152,7 +155,6 @@ const HTML = `<!DOCTYPE html>
 serve(async (req) => {
   const { pathname } = new URL(req.url);
 
-  // Handle missing API key
   if (!GEMINI_API_KEY) {
     return new Response("GEMINI_API_KEY not set", { status: 500 });
   }
