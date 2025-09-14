@@ -28,7 +28,7 @@
     const inputForm = document.getElementById('input-form');
     const messageInput = document.getElementById('message-input');
 
-    const ws = new WebSocket('ws://localhost:3000');
+    const ws = new WebSocket('wss://' + window.location.host);
     let userName = "";
 
     ws.onopen = () => {
@@ -38,8 +38,12 @@
 
     ws.onmessage = event => {
         const data = JSON.parse(event.data);
-        if (data.sender === 'bot') {
+        if (data.sender === 'user') {
+            addMessage(data.message, 'user', data.name);
+        } else if (data.sender === 'bot') {
             addMessage(data.message, 'bot');
+        } else if (data.sender === 'error') {
+            addMessage(data.message, 'bot'); // Display errors in the bot style
         }
     };
 
@@ -48,7 +52,6 @@
         const userMsg = messageInput.value.trim();
         if (userMsg) {
             ws.send(JSON.stringify({ name: userName, userMsg: userMsg }));
-            addMessage(userMsg, 'user', userName);
             messageInput.value = '';
         }
     });
